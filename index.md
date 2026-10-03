@@ -119,7 +119,7 @@ We may update this privacy policy from time to time. Changes will be posted on t
 ### 9. Contact
 
 If you have questions about this privacy policy, please contact us at:  
-**[your email here]**
+**tomat.firma@gmail.com**
 
 ---
 
@@ -239,4 +239,4 @@ Googleのサービスを使用するアプリから収集した情報のGoogle�
 ### 9. お問い合わせ
 
 このプライバシーポリシーに関するご質問は、以下のメールアドレスまでお問い合わせください：  
-**[your email here]**
+**tomat.firma@gmail.com**
