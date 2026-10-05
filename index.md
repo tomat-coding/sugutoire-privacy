@@ -36,7 +36,7 @@ To understand how the app is used and to improve it, we collect anonymous usage 
 - When you start navigation to a toilet: the toilet's identifier and type, how navigation was started (nearby list, widget, status card or the "Navigate to nearest" button), its position in the list, and an approximate distance range (for example "500 m – 1 km")
 - App version, device model, operating system version and approximate region (country or city level)
 
-These statistics are collected with Google Analytics for Firebase, which uses a random identifier created for each app installation. A copy of the navigation events (toilet identifier, how navigation was started, list position, app version, platform and time) is also stored in our database, without any identifier. We use it for statistics and for features such as showing which toilets are popular.
+These statistics are collected with Google Analytics for Firebase, which uses a random identifier created for each app installation. We export a copy of these statistics, including that identifier, to Google BigQuery, where we analyse them for statistics and for features such as showing which toilets are popular. The app itself does not send usage events anywhere else.
 
 #### Crash reports
 If the app crashes, a crash report is sent with Firebase Crashlytics: technical details of the error, device model, operating system and app version, and a random installation identifier.
@@ -62,7 +62,7 @@ We do not use your data for advertising, and we do not sell or rent it.
 
 ### 3. Data Storage and Security
 
-Reports, new toilet submissions and navigation events are stored in Google Firebase Firestore. Access rules allow the app to add records, but not to read, change or delete them. Usage statistics and crash reports are processed by Google as described in section 4. Data is transmitted over encrypted connections (HTTPS).
+Reports and new toilet submissions are stored in Google Firebase Firestore. Access rules allow the app to add records, but not to read, change or delete them. Usage statistics and crash reports are processed by Google as described in section 4. The copy of usage statistics we export to Google BigQuery is stored in Google Cloud's Tokyo region and is accessible only to us. Data is transmitted over encrypted connections (HTTPS).
 
 ---
 
@@ -73,10 +73,10 @@ The app sends information to the following services. This section also serves as
 | Service (provider) | Information sent | Purpose |
 |---|---|---|
 | Overpass API (overpass-api.de, operated for OpenStreetMap data) | Your current coordinates (to search within about 2 km) and, as with any internet request, your IP address | Finding nearby toilets |
-| Google Analytics for Firebase (Google LLC) | Usage events described in section 1, app-instance identifier, device and app information | App usage statistics |
+| Google Analytics for Firebase (Google LLC) | Usage events described in section 1, app-instance identifier, device and app information | App usage statistics and features such as toilet popularity (a copy is exported to Google BigQuery, see section 3) |
 | Firebase Crashlytics (Google LLC) | Crash details, device and app information, installation identifier | Fixing errors |
 | Firebase Remote Config (Google LLC) | App and device information, installation identifier | Delivering app settings, such as update notices and in-app notices |
-| Firebase Firestore (Google LLC) | Reports, new toilet submissions and navigation events described in section 1 | Storing this information |
+| Firebase Firestore (Google LLC) | Reports and new toilet submissions described in section 1 | Storing this information |
 | Google Maps (Google LLC) | Opened only when you tap Navigate; the destination toilet's coordinates are passed to the Maps app | Navigation |
 
 Google's privacy policy: [https://policies.google.com/privacy](https://policies.google.com/privacy)  
@@ -91,15 +91,16 @@ Toilet location data comes from OpenStreetMap ([openstreetmap.org](https://www.o
 - **Widget**: removing the widget from your home screen stops background updates.
 - **Usage statistics and crash reports**: these are part of how the app works and cannot be switched off inside the app. Uninstalling the app stops all collection.
 
-Usage statistics and navigation events are not linked to your name or any account, so we generally cannot identify which records belong to you. If you have a question about your data, contact us (section 9).
+Usage statistics are not linked to your name or any account, so we generally cannot identify which records belong to you. If you have a question about your data, contact us (section 9).
 
 ---
 
 ### 6. Data Retention
 
 - **Location**: not retained. It is used on your device and in the toilet search, then discarded.
-- **Reports, new toilet submissions and navigation events**: kept indefinitely, to maintain data quality and long-term statistics.
+- **Reports and new toilet submissions**: kept indefinitely, to maintain data quality.
 - **Usage statistics in Google Analytics**: kept according to the data retention period set in Google Analytics.
+- **Usage statistics exported to Google BigQuery**: kept for long-term statistics, such as toilet popularity, and deleted when no longer needed.
 - **Crash reports**: kept by Firebase Crashlytics for 90 days.
 
 ---
@@ -156,7 +157,7 @@ If you have questions about this privacy policy, please contact us at:
 - トイレへのナビを開始したとき：トイレの識別子と種類、ナビの開始方法（周辺リスト、ウィジェット、ステータスカード、「最寄りへナビゲート」ボタン）、リスト内の順位、おおよその距離の範囲（例：「500m〜1km」）
 - アプリのバージョン、端末のモデル、OSのバージョン、おおよその地域（国・都市レベル）
 
-これらの統計はGoogle Analytics for Firebaseで収集され、アプリのインストールごとに作成されるランダムな識別子が使用されます。また、ナビ開始イベントの記録（トイレの識別子、ナビの開始方法、リスト内の順位、アプリのバージョン、プラットフォーム、日時）を、識別子を含めずに当社のデータベースにも保存します。これは統計や、人気のトイレの表示などの機能に使用します。
+これらの統計はGoogle Analytics for Firebaseで収集され、アプリのインストールごとに作成されるランダムな識別子が使用されます。当社はこの統計の写しを、その識別子を含めてGoogle BigQueryにエクスポートし、統計や人気のトイレの表示などの機能のために分析します。アプリ自体が利用イベントをこれ以外の送信先に送ることはありません。
 
 #### クラッシュレポート
 アプリがクラッシュした場合、Firebase Crashlyticsによりクラッシュレポートが送信されます。内容は、エラーの技術的な詳細、端末のモデル、OSとアプリのバージョン、ランダムなインストール識別子です。
@@ -182,7 +183,7 @@ If you have questions about this privacy policy, please contact us at:
 
 ### 3. データの保存とセキュリティ
 
-報告、新しいトイレの登録、ナビ開始イベントはGoogle Firebase Firestoreに保存されます。アクセスルールにより、アプリからは記録の追加のみが可能で、読み取り・変更・削除はできません。利用統計とクラッシュレポートは、第4項のとおりGoogleが処理します。通信は暗号化（HTTPS）されています。
+報告と新しいトイレの登録はGoogle Firebase Firestoreに保存されます。アクセスルールにより、アプリからは記録の追加のみが可能で、読み取り・変更・削除はできません。利用統計とクラッシュレポートは、第4項のとおりGoogleが処理します。Google BigQueryにエクスポートした利用統計の写しは、Google Cloudの東京リージョンに保存され、当社のみがアクセスできます。通信は暗号化（HTTPS）されています。
 
 ---
 
@@ -193,10 +194,10 @@ If you have questions about this privacy policy, please contact us at:
 | 送信先（提供者） | 送信される情報 | 利用目的 |
 |---|---|---|
 | Overpass API（overpass-api.de、OpenStreetMapデータの検索サービス） | 現在地の座標（約2km以内を検索するため）、およびインターネット通信に伴うIPアドレス | 近くのトイレの検索 |
-| Google Analytics for Firebase（Google LLC） | 第1項に記載の利用イベント、アプリインスタンス識別子、端末・アプリの情報 | アプリの利用統計 |
+| Google Analytics for Firebase（Google LLC） | 第1項に記載の利用イベント、アプリインスタンス識別子、端末・アプリの情報 | アプリの利用統計、およびトイレの人気表示などの機能（写しをGoogle BigQueryにエクスポートします。第3項参照） |
 | Firebase Crashlytics（Google LLC） | クラッシュの詳細、端末・アプリの情報、インストール識別子 | エラーの修正 |
 | Firebase Remote Config（Google LLC） | アプリ・端末の情報、インストール識別子 | アップデートのお知らせなど、アプリ設定の配信 |
-| Firebase Firestore（Google LLC） | 第1項に記載の報告、新しいトイレの登録、ナビ開始イベント | これらの情報の保存 |
+| Firebase Firestore（Google LLC） | 第1項に記載の報告と新しいトイレの登録 | これらの情報の保存 |
 | Google マップ（Google LLC） | 「ナビゲート」をタップした場合のみ起動し、目的地のトイレの座標をマップアプリに渡します | ナビゲーション |
 
 Googleのプライバシーポリシー：[https://policies.google.com/privacy](https://policies.google.com/privacy)  
@@ -211,15 +212,16 @@ Googleのサービスを使用するアプリから収集した情報のGoogle�
 - **ウィジェット**：ホーム画面からウィジェットを削除すると、バックグラウンドでの更新は停止します。
 - **利用統計・クラッシュレポート**：アプリの機能の一部であり、アプリ内でオフにすることはできません。アプリをアンインストールすると、すべての収集が停止します。
 
-利用統計とナビ開始イベントは氏名やアカウントと結び付いていないため、どの記録がお客様のものかを当社が特定することは通常できません。データについてのご質問は、第9項の連絡先までお問い合わせください。
+利用統計は氏名やアカウントと結び付いていないため、どの記録がお客様のものかを当社が特定することは通常できません。データについてのご質問は、第9項の連絡先までお問い合わせください。
 
 ---
 
 ### 6. データの保持期間
 
 - **位置情報**：保持しません。端末上およびトイレの検索で使用した後、破棄されます。
-- **報告、新しいトイレの登録、ナビ開始イベント**：データ品質の維持と長期的な統計のため、無期限に保持します。
+- **報告、新しいトイレの登録**：データ品質の維持のため、無期限に保持します。
 - **Google Analyticsの利用統計**：Google Analyticsで設定したデータ保持期間に従って保持されます。
+- **Google BigQueryにエクスポートした利用統計**：トイレの人気表示などの長期的な統計のために保持し、不要になった時点で削除します。
 - **クラッシュレポート**：Firebase Crashlyticsにより90日間保持されます。
 
 ---
