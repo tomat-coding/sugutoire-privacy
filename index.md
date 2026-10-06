@@ -20,23 +20,24 @@ To search for toilets, the app sends your current coordinates to the Overpass AP
 #### Toilet issue reports
 When you report a problem with a toilet, we store:
 
-- Toilet identifier and coordinates
+- Toilet identifier, name and coordinates
 - Issue type selected
 - Optional comment you provide
 - App version
 - Submission timestamp
 
 #### New toilet submissions
-When you suggest a new toilet, we store the details you enter: its name (optional), its position on the map, type, access, opening hours, accessibility, changing table, number of stalls, and the submission time. The map pin starts at your current location, so the submitted position may be close to where you are.
+When you suggest a new toilet, we store the details you enter: its name (optional), its position on the map, type, access, opening hours, accessibility, changing table, ostomate facilities, Western-style toilet, unisex toilet, number of stalls, an optional description of where the toilet is (for example "2F, next to the elevator"), and the submission time. The map pin starts at your current location, so the submitted position may be close to where you are. While you choose the position, the map is loaded from MapTiler (see section 4).
 
 #### App usage statistics
-To understand how the app is used and to improve it, we collect anonymous usage events:
+To understand how the app is used and to improve it, we collect usage events:
 
 - Which screens of the app are opened
 - When you start navigation to a toilet: the toilet's identifier and type, how navigation was started (nearby list, widget, status card or the "Navigate to nearest" button), its position in the list, and an approximate distance range (for example "500 m – 1 km")
+- Standard events that Google Analytics records automatically, such as when the app is first opened, app sessions and time spent in the app
 - App version, device model, operating system version and approximate region (country or city level)
 
-These statistics are collected with Google Analytics for Firebase, which uses a random identifier created for each app installation. We export a copy of these statistics, including that identifier, to Google BigQuery, where we analyse them for statistics and for features such as showing which toilets are popular. The app itself does not send usage events anywhere else.
+These statistics are collected with Google Analytics for Firebase, which uses a random identifier created for each app installation. They are not linked to your name or any account. We export a copy of these statistics, including that identifier, to Google BigQuery, where we analyse them for statistics and for features such as showing which toilets are popular. The app itself does not send usage events anywhere else.
 
 #### Crash reports
 If the app crashes, a crash report is sent with Firebase Crashlytics: technical details of the error, device model, operating system and app version, and a random installation identifier.
@@ -73,11 +74,12 @@ The app sends information to the following services. This section also serves as
 | Service (provider) | Information sent | Purpose |
 |---|---|---|
 | Overpass API (overpass-api.de, operated for OpenStreetMap data) | Your current coordinates (to search within about 2 km) and, as with any internet request, your IP address | Finding nearby toilets |
+| MapTiler (MapTiler AG) | Only when you suggest a new toilet: the map area being viewed (which starts at your current location) and, as with any internet request, your IP address | Showing the map for choosing the toilet's position |
 | Google Analytics for Firebase (Google LLC) | Usage events described in section 1, app-instance identifier, device and app information | App usage statistics and features such as toilet popularity (a copy is exported to Google BigQuery, see section 3) |
 | Firebase Crashlytics (Google LLC) | Crash details, device and app information, installation identifier | Fixing errors |
 | Firebase Remote Config (Google LLC) | App and device information, installation identifier | Delivering app settings, such as update notices and in-app notices |
 | Firebase Firestore (Google LLC) | Reports and new toilet submissions described in section 1 | Storing this information |
-| Google Maps (Google LLC) | Opened only when you tap Navigate; the destination toilet's coordinates are passed to the Maps app | Navigation |
+| Google Maps (Google LLC) | Opened only when you tap Navigate; the destination toilet's coordinates and, depending on the navigation mode, its name and address are passed to the Maps app | Navigation |
 
 Google's privacy policy: [https://policies.google.com/privacy](https://policies.google.com/privacy)  
 How Google uses information from apps that use its services: [https://policies.google.com/technologies/partner-sites](https://policies.google.com/technologies/partner-sites)  
@@ -141,23 +143,24 @@ If you have questions about this privacy policy, please contact us at:
 #### トイレの問題の報告
 トイレの問題を報告した場合、以下の情報を保存します：
 
-- トイレの識別子と座標
+- トイレの識別子、名称、座標
 - 選択した問題の種類
 - 任意で入力したコメント
 - アプリのバージョン
 - 送信日時
 
 #### 新しいトイレの登録
-新しいトイレを報告した場合、入力された内容（名称（任意）、地図上の位置、種類、利用条件、営業時間、バリアフリー対応、おむつ交換台、個室の数）と送信日時を保存します。地図のピンは現在地から始まるため、送信される位置はお客様の現在地に近い場合があります。
+新しいトイレを報告した場合、入力された内容（名称（任意）、地図上の位置、種類、利用条件、営業時間、バリアフリー対応、おむつ交換台、オストメイト対応、洋式トイレ、男女共用トイレ、個室の数、任意で入力した場所の説明（例：「2階、エレベーター横」））と送信日時を保存します。地図のピンは現在地から始まるため、送信される位置はお客様の現在地に近い場合があります。位置を選ぶ際の地図はMapTilerから読み込まれます（第4項参照）。
 
 #### アプリの利用統計
-アプリの利用状況を把握し改善するため、匿名の利用イベントを収集します：
+アプリの利用状況を把握し改善するため、以下の利用イベントを収集します：
 
 - アプリで開いた画面
 - トイレへのナビを開始したとき：トイレの識別子と種類、ナビの開始方法（周辺リスト、ウィジェット、ステータスカード、「最寄りへナビゲート」ボタン）、リスト内の順位、おおよその距離の範囲（例：「500m〜1km」）
+- Google Analyticsが自動的に記録する標準イベント（初回起動、アプリの利用セッション、利用時間など）
 - アプリのバージョン、端末のモデル、OSのバージョン、おおよその地域（国・都市レベル）
 
-これらの統計はGoogle Analytics for Firebaseで収集され、アプリのインストールごとに作成されるランダムな識別子が使用されます。当社はこの統計の写しを、その識別子を含めてGoogle BigQueryにエクスポートし、統計や人気のトイレの表示などの機能のために分析します。アプリ自体が利用イベントをこれ以外の送信先に送ることはありません。
+これらの統計はGoogle Analytics for Firebaseで収集され、アプリのインストールごとに作成されるランダムな識別子が使用されます。氏名やアカウントとは結び付けられません。当社はこの統計の写しを、その識別子を含めてGoogle BigQueryにエクスポートし、統計や人気のトイレの表示などの機能のために分析します。アプリ自体が利用イベントをこれ以外の送信先に送ることはありません。
 
 #### クラッシュレポート
 アプリがクラッシュした場合、Firebase Crashlyticsによりクラッシュレポートが送信されます。内容は、エラーの技術的な詳細、端末のモデル、OSとアプリのバージョン、ランダムなインストール識別子です。
@@ -194,11 +197,12 @@ If you have questions about this privacy policy, please contact us at:
 | 送信先（提供者） | 送信される情報 | 利用目的 |
 |---|---|---|
 | Overpass API（overpass-api.de、OpenStreetMapデータの検索サービス） | 現在地の座標（約2km以内を検索するため）、およびインターネット通信に伴うIPアドレス | 近くのトイレの検索 |
+| MapTiler（MapTiler AG） | 新しいトイレを登録する場合のみ：表示中の地図の範囲（最初は現在地周辺）、およびインターネット通信に伴うIPアドレス | トイレの位置を選ぶための地図の表示 |
 | Google Analytics for Firebase（Google LLC） | 第1項に記載の利用イベント、アプリインスタンス識別子、端末・アプリの情報 | アプリの利用統計、およびトイレの人気表示などの機能（写しをGoogle BigQueryにエクスポートします。第3項参照） |
 | Firebase Crashlytics（Google LLC） | クラッシュの詳細、端末・アプリの情報、インストール識別子 | エラーの修正 |
 | Firebase Remote Config（Google LLC） | アプリ・端末の情報、インストール識別子 | アップデートのお知らせなど、アプリ設定の配信 |
 | Firebase Firestore（Google LLC） | 第1項に記載の報告と新しいトイレの登録 | これらの情報の保存 |
-| Google マップ（Google LLC） | 「ナビゲート」をタップした場合のみ起動し、目的地のトイレの座標をマップアプリに渡します | ナビゲーション |
+| Google マップ（Google LLC） | 「ナビゲート」をタップした場合のみ起動し、目的地のトイレの座標と、ナビの方法によってはその名称・住所をマップアプリに渡します | ナビゲーション |
 
 Googleのプライバシーポリシー：[https://policies.google.com/privacy](https://policies.google.com/privacy)  
 Googleのサービスを使用するアプリから収集した情報のGoogleによる使用について：[https://policies.google.com/technologies/partner-sites](https://policies.google.com/technologies/partner-sites)  
