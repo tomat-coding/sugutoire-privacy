@@ -13,7 +13,7 @@ Last updated: October 2026 / 最終更新日：2026年10月
 すぐトイレ uses your device's location to find nearby toilets:
 
 - while you use the app, and
-- if you add the home screen widget, periodically in the background (about every 15 minutes) to keep the widget up to date.
+- if you add the home screen widget, when the app updates it or when you tap Refresh on the widget.
 
 To search for toilets, the app sends your current coordinates to the Overpass API, a public search service for OpenStreetMap data (see section 4). Your location is not stored on our servers, and we do not keep a history of where you have been.
 
@@ -90,7 +90,7 @@ Toilet location data comes from OpenStreetMap ([openstreetmap.org](https://www.o
 ### 5. Your Choices
 
 - **Location**: you can turn off location access for the app at any time in your device settings. The app cannot find nearby toilets without it.
-- **Widget**: removing the widget from your home screen stops background updates.
+- **Widget**: the widget uses your location only when the app updates it or when you tap Refresh on it. Removing the widget from your home screen stops this.
 - **Usage statistics and crash reports**: these are part of how the app works and cannot be switched off inside the app. Uninstalling the app stops all collection.
 
 Usage statistics are not linked to your name or any account, so we generally cannot identify which records belong to you. If you have a question about your data, contact us (section 9).
@@ -136,7 +136,7 @@ If you have questions about this privacy policy, please contact us at:
 すぐトイレは、近くのトイレを探すためにデバイスの位置情報を使用します。
 
 - アプリの使用中
-- ホーム画面にウィジェットを追加している場合は、ウィジェットを最新の状態に保つため、バックグラウンドで定期的に（約15分ごと）
+- ホーム画面にウィジェットを追加している場合は、アプリによる更新時、またはウィジェットの「更新」をタップしたとき
 
 トイレを検索するため、アプリは現在地の座標を、OpenStreetMapのデータを検索する公開サービス「Overpass API」に送信します（第4項参照）。位置情報を当社のサーバーに保存することはなく、移動履歴も保持しません。
 
@@ -213,7 +213,7 @@ Googleのサービスを使用するアプリから収集した情報のGoogle�
 ### 5. お客様の選択
 
 - **位置情報**：端末の設定で、いつでもアプリの位置情報へのアクセスをオフにできます。オフにすると近くのトイレを探すことはできません。
-- **ウィジェット**：ホーム画面からウィジェットを削除すると、バックグラウンドでの更新は停止します。
+- **ウィジェット**：ウィジェットが位置情報を使うのは、アプリによる更新時、またはウィジェットの「更新」をタップしたときだけです。ホーム画面からウィジェットを削除すると、利用は停止します。
 - **利用統計・クラッシュレポート**：アプリの機能の一部であり、アプリ内でオフにすることはできません。アプリをアンインストールすると、すべての収集が停止します。
 
 利用統計は氏名やアカウントと結び付いていないため、どの記録がお客様のものかを当社が特定することは通常できません。データについてのご質問は、第9項の連絡先までお問い合わせください。
